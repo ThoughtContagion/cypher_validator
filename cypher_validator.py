@@ -19,8 +19,18 @@ class CypherErrorListener(ErrorListener):
     def get_errors(self):
         return self.errors
 
+
 def validate_query(query):
-    input_stream = InputStream(query)
+    # Collect multi-line query using a loop
+    multi_line_query = ""
+    while True:
+        line = input("Enter next line of your Cypher query (or press Enter to finish): ")
+        if not line:
+            break
+        multi_line_query += line + "\n"  # Add newline for proper formatting
+
+    # Parse the collected multi-line query
+    input_stream = InputStream(multi_line_query)
     lexer = CypherLexer(input_stream)
     stream = CommonTokenStream(lexer)
     parser = CypherParser(stream)
@@ -39,8 +49,6 @@ def validate_query(query):
     except Exception as e:
         print(f"Cypher query is invalid: {e}")
 
+
 if __name__ == "__main__":
-    query = """
-MATCH p = asdf
-"""
-    validate_query(query)
+    validate_query(None)
